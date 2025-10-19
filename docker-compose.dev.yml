@@ -1,0 +1,28 @@
+services:
+  dev:
+    build:
+      context: .
+      dockerfile: .devcontainer/Dockerfile
+      args:
+        UID: ${UID:-1000}
+        GID: ${GID:-1000}
+    image: job-alerter-dev:latest
+    container_name: job-alerter-dev
+    working_dir: /work
+    volumes:
+      - .:/work:cached
+      # dedicated writable cache/venv lives in workspace (bind mount for speed on macOS)
+      - ./.venv:/work/.venv
+    environment:
+      # keep a container-local venv to avoid global site-packages
+      - VIRTUAL_ENV=/work/.venv
+      - PATH=/work/.venv/bin:$PATH
+      - PYTHONDONTWRITEBYTECODE=1
+      - PYTHONUNBUFFERED=1
+    command: sleep infinity
+    deploy:
+      resources:
+        limits:
+          cpus: "2.0"
+          memory: 2g
+    # For Docker Desktop: you can pause this container when not in use

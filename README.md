@@ -6,72 +6,58 @@ Development is done **entirely inside a Docker dev container**, ensuring every c
 
 ---
 
-## 🚀 Quick Start (Development)
+## 💻 Development Workflow
 
-### 1️⃣ Build the dev container
+All development is done **inside a Docker container** with **LunarVim (lvim)** preinstalled.
+
+### 1. Build and start the container
 ```bash
 docker compose -f docker-compose.dev.yml build
-```
-Builds the isolated Python environment with all required tools (linters, test runners, etc.).
-
-### 2️⃣ Start the container
-```bash
 docker compose -f docker-compose.dev.yml up -d
 ```
-Starts the container in the background and mounts your source code.
 
-### 3️⃣ Enter the container
+This will:
+- Build the Python 3.12 image from `.devcontainer/Dockerfile`
+- Install project dependencies from `requirements.txt` and `requirements-dev.txt`
+- Install Neovim (v0.10+) and LunarVim with all dependencies
+- Keep the container running in the background
+
+### 2. Exec into the container
 ```bash
-docker compose -f docker-compose.dev.yml exec dev bash
+docker exec -it job-alerter-dev bash
 ```
+
+You’ll land in `/work`, the project root inside the container.
+
 Your prompt should now look like:
 ```
 dev@container:/work$
 ```
 
-### 4️⃣ Set up dependencies (first time only)
-Inside the container:
+### 3. Start coding with LunarVim or execute tests or main
+
+You now have a full IDE-like setup in the terminal.  
+LunarVim already includes Treesitter, Mason, and LSP tooling support.
+
 ```bash
-python3 -m venv .venv
-source .venv/bin/activate
-pip3 install -r requirements.txt
-pip3 install pre-commit ruff black pytest
-pre-commit install
-```
-This creates a project-local Python environment (`.venv`) stored on your host for persistence.
+lvim .
 
----
-
-## 💻 Daily Developer Flow
-
-After the first setup, your `.venv` and dependencies persist across sessions.
-
-Each day:
-```bash
-# 1. Start the container again
-docker compose -f docker-compose.dev.yml up -d
-
-# 2. Enter it
-docker compose -f docker-compose.dev.yml exec dev bash
-
-# 3. Activate your venv
-source .venv/bin/activate
-
-# 4. Run tests or start coding
 pytest -q
+
 python3 src/main.py
+```
 
-# 5. Commit your work (pre-commit hooks will auto-run)
-git add .
-git commit -m "Your message"
-
-# 6. Exit when done
+### 4. Stop or clean up
+```bash
+# Exit when done working in container
 exit
 
-# 7. Stop the container (optional)
-docker compose -f docker-compose.dev.yml down
+# Stop container
+docker compose down
+
+# Rebuild from scratch (optional)
+docker compose build --no-cache
 ```
-You do **not** need to reinstall dependencies every day—your `.venv` folder persists between runs.
 
 ---
 
@@ -101,5 +87,4 @@ docker compose -f docker-compose.dev.yml build
 docker compose -f docker-compose.dev.yml up -d
 docker compose -f docker-compose.dev.yml exec dev bash
 ```
-Then recreate your `.venv` and reinstall dependencies as shown above.
 

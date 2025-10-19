@@ -1,5 +1,6 @@
 from pathlib import Path
 import yaml
+from providers.levels_html import fetch_leaderboards
 
 
 def load_yaml(p: str):
@@ -25,6 +26,24 @@ def main():
     print(f"- levels urls: {len(app['levels']['urls'])}")
     print(f"- blacklist entries: {len(blacklist)}")
     print(f"- include keywords: {rules['keywords']['include_any']}")
+
+    urls = app["levels"]["urls"]
+    user_agent = app["runtime"]["user_agent"]
+    timeout = app["runtime"]["request_timeout"]
+
+    rows, companies = fetch_leaderboards(urls, timeout, user_agent)
+
+    print(f"\n[levels] rows parsed: {len(rows)}")
+    for r in rows[:8]:
+        print(
+            f"rank={r['rank']:<3} company={r['company']:<20} "
+            f"title={r['title']:<25} total={r['comp_total']} base={r['comp_base']} stock={r['comp_stock']} bonus={r['comp_bonus']}"
+        )
+
+    print(f"\n[levels] unique companies: {len(companies)}")
+    for c in companies[:10]:
+        print(" -", c)
+
     print("Done.")
 
 

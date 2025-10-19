@@ -1,0 +1,19 @@
+email:
+  smtp_host: "smtp.gmail.com"
+  smtp_port: 587
+  username: "you@example.com"
+  password: "APP_PASSWORD"
+  from_addr: "you@example.com"
+  to_addrs: ["you@example.com"]
+
+levels:
+  urls:
+    - "https://www.levels.fyi/leaderboard/Software-Engineer/Entry-Level-Engineer/region/Greater-Austin-Area/"
+    - "https://www.levels.fyi/leaderboard/Software-Engineer/Software-Engineer/region/Greater-Austin-Area/"
+
+runtime:
+  seed_mode: true
+  request_timeout: 20
+  per_domain_sleep: 1.0
+  user_agent: "job-alerter/0.1"
+  db_path: "./data/jobs.db"

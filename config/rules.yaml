@@ -1,0 +1,6 @@
+keywords:
+  include_any: ["backend", "distributed", "platform", "scala", "python", "aws", "engineer", "java"]
+  exclude_any: ["principal", "director", "intern", "staff"]
+locations:
+  include_any: ["Austin", "Remote", "United States"]
+  exclude_any: []

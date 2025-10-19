@@ -3,23 +3,15 @@ services:
     build:
       context: .
       dockerfile: .devcontainer/Dockerfile
-      args:
-        UID: ${UID:-1000}
-        GID: ${GID:-1000}
     image: job-alerter-dev:latest
     container_name: job-alerter-dev
     working_dir: /work
     volumes:
       - .:/work:cached
-      # dedicated writable cache/venv lives in workspace (bind mount for speed on macOS)
-      - ./.venv:/work/.venv
     environment:
-      # keep a container-local venv to avoid global site-packages
-      - VIRTUAL_ENV=/work/.venv
-      - PATH=/work/.venv/bin:$PATH
       - PYTHONDONTWRITEBYTECODE=1
       - PYTHONUNBUFFERED=1
-    command: sleep infinity
+    command: bash -lc "sleep infinity"
     deploy:
       resources:
         limits:

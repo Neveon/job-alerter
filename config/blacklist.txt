@@ -1,0 +1,1 @@
+# one company per line (case-insensitive contains)

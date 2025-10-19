@@ -1,6 +1,7 @@
 from pathlib import Path
 import yaml
 from providers.levels_html import fetch_leaderboards
+from targets import load_blacklist, filter_companies, filter_rows
 
 
 def load_yaml(p: str):
@@ -10,21 +11,10 @@ def load_yaml(p: str):
 def main():
     app = load_yaml("config/app.yaml")
     rules = load_yaml("config/rules.yaml")
-    bl_lines = (
-        Path("config/blacklist.txt").read_text().splitlines()
-        if Path("config/blacklist.txt").exists()
-        else []
-    )
-    blacklist = [
-        line.strip()
-        for line in bl_lines
-        if line.strip() and not line.strip().startswith("#")
-    ]
 
     print("job-alerter bootstrap OK")
     print(f"- seed_mode: {app['runtime']['seed_mode']}")
     print(f"- levels urls: {len(app['levels']['urls'])}")
-    print(f"- blacklist entries: {len(blacklist)}")
     print(f"- include keywords: {rules['keywords']['include_any']}")
 
     urls = app["levels"]["urls"]
@@ -32,19 +22,27 @@ def main():
     timeout = app["runtime"]["request_timeout"]
 
     rows, companies = fetch_leaderboards(urls, timeout, user_agent)
+    print(f"[levels] rows parsed: {len(rows)}  | unique companies: {len(companies)}")
 
-    print(f"\n[levels] rows parsed: {len(rows)}")
-    for r in rows[:8]:
+    # Load & apply blacklist
+    bl = load_blacklist()  # case-insensitive substring match
+    print(f"[blacklist] terms: {len(bl)}")
+
+    rows_f = filter_rows(rows, bl)
+    companies_f = filter_companies(companies, bl)
+
+    # Preview before/after
+    print(f"[filtered] rows: {len(rows_f)}  | companies: {len(companies_f)}")
+    print("\nTop 10 (after blacklist):")
+    for r in rows_f[:10]:
         print(
             f"rank={r['rank']:<3} company={r['company']:<20} "
-            f"title={r['title']:<25} total={r['comp_total']} base={r['comp_base']} stock={r['comp_stock']} bonus={r['comp_bonus']}"
+            f"title={r['title']:<25} total={r['comp_total']}"
         )
 
-    print(f"\n[levels] unique companies: {len(companies)}")
-    for c in companies[:10]:
+    print("\nCompanies (first 10 after blacklist):")
+    for c in companies_f[:10]:
         print(" -", c)
-
-    print("Done.")
 
 
 if __name__ == "__main__":

@@ -1,3 +1,4 @@
 # one company per line (case-insensitive contains)
 amazon
 twitch
+whole foods

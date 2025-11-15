@@ -1,6 +1,9 @@
-keywords:
-  include_any: ["backend", "distributed", "platform", "scala", "python", "aws", "engineer", "java"]
-  exclude_any: ["principal", "director", "intern", "staff"]
+role_titles:
+  include_any: ["Software Engineer", "Software Developer", "Software Dev Engineer", "Backend Engineer", "Software Developer Engineer", "Python Engineer"]
+  exclude_any: ["Principal", "Director", "Intern", "Staff", "Lead", "Senior Staff", "Distinguished", "Founder", "Full Stack Engineer", "Senior Software Engineer", "Sr. Software Engineer", "Software Engineer III", "Software Engineer IV", "Software Engineer V", "AI Engineer", "Forward Deployed Engineer"]
+job_descriptions:
+  include_any: ["backend", "distributed", "platform", "scala", "python", "aws", "java", "cloud", "docker", "aws"]
+  exclude_any: ["frontend", "mobile", "ios", "android", "angular", "vue"]
 locations:
-  include_any: ["Austin", "Remote", "United States"]
+  include_any: ["Austin", "Remote", "Texas", "TX"]
   exclude_any: []

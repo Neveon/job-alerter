@@ -11,6 +11,13 @@ levels:
     - "https://www.levels.fyi/leaderboard/Software-Engineer/Entry-Level-Engineer/region/Greater-Austin-Area/"
     - "https://www.levels.fyi/leaderboard/Software-Engineer/Software-Engineer/region/Greater-Austin-Area/"
 
+jobspy:
+  site: "indeed"
+  location: "Austin, TX"
+  radius_miles: 50
+  results_wanted: 100
+  hours_old: 168
+
 runtime:
   seed_mode: true
   request_timeout: 20
